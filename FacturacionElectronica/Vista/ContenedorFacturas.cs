@@ -34,123 +34,6 @@ namespace FacturacionElectronica.Vista
             StartPosition = FormStartPosition.CenterScreen;
         }
 
-        public void LoadManifiestos()
-        {
-            GridViewFacturas.Columns.Clear();
-            Datos = new DataTable();
-            Datos = ListaFacturas.selectListFacturas();
-            GridViewFacturas.DataSource = Datos;
-            // Boton Dian
-            DataGridViewButtonColumn btnEnviar = new DataGridViewButtonColumn();
-            btnEnviar.FlatStyle = FlatStyle.Standard;
-            btnEnviar.CellTemplate.Style.BackColor = Color.FromArgb(255, 150, 62);
-            btnEnviar.Name = "DIAN";
-            btnEnviar.Text = "Enviar";
-            btnEnviar.UseColumnTextForButtonValue = true;
-
-
-            //btnEnviar = Image.FromFile(Environment.CurrentDirectory + @"\Mini.jpg");
-            // Align the image and text on the button.
-            //button1.ImageAlign = ContentAlignment.MiddleRight;
-            //button1.TextAlign = ContentAlignment.MiddleLeft;
-            //Boton Cliente
-            DataGridViewButtonColumn btnEnviarCliente = new DataGridViewButtonColumn();
-            btnEnviarCliente.FlatStyle = FlatStyle.Standard;
-            btnEnviarCliente.CellTemplate.Style.BackColor = Color.FromArgb(255, 150, 62);
-            btnEnviarCliente.Name = "Cliente";
-            btnEnviarCliente.Text = "Enviar";
-            btnEnviarCliente.UseColumnTextForButtonValue = true;
-            int columnIndex = 4;
-            if (GridViewFacturas.Columns["Enviar"] == null)
-            {
-                GridViewFacturas.Columns.Insert(columnIndex, btnEnviar);
-            }
-            int columnIndexCliente = 6;
-            if (GridViewFacturas.Columns["Enviar"] == null)
-            {
-                GridViewFacturas.Columns.Insert(columnIndexCliente, btnEnviarCliente);
-            }
-            GridViewFacturas.DefaultCellStyle.Font = new Font("Arial", 11);
-            GridViewFacturas.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 85, 118);
-            GridViewFacturas.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 11, FontStyle.Bold);
-            GridViewFacturas.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-
-            DataGridViewColumn column = GridViewFacturas.Columns[0];
-            column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            column.Width = 70;
-            DataGridViewColumn columnUno = GridViewFacturas.Columns[1];
-            columnUno.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            columnUno.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            columnUno.Width = 110;
-            DataGridViewColumn columnDos = GridViewFacturas.Columns[2];
-            columnDos.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            columnDos.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            columnDos.Width = 345;
-            DataGridViewColumn columnTres = GridViewFacturas.Columns[3];
-            columnTres.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            columnTres.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            columnTres.Width = 120;
-            DataGridViewColumn columnCuatro = GridViewFacturas.Columns[4];
-            columnCuatro.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            columnCuatro.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            columnCuatro.Width = 100;
-            DataGridViewColumn columnCinco = GridViewFacturas.Columns[5];
-            columnCinco.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            columnCinco.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            columnCinco.Width = 120;
-            DataGridViewColumn columnSeis = GridViewFacturas.Columns[6];
-            columnSeis.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            columnSeis.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-
-
-            foreach (DataGridViewRow row in GridViewFacturas.Rows)
-            {
-                var TipoDocumento = row.Cells["Prefijo"].Value.ToString();
-                if (ambiente == "")
-                {
-                    var configura = new ConfiguracionDIANDAO().getConfiguracion(row.Cells["Consecutivo"].Value.ToString(), "", "F", TipoDocumento);
-                    ambiente = configura != null ? configura.TipoAmbiente : "";
-                }
-
-                var statusDIAN = row.Cells["StatusDIAN"].Value.ToString();
-                var statusCliente = row.Cells["StatusCliente"].Value.ToString();
-
-                if (statusDIAN.Contains("3"))
-                {
-                    if (ambiente == "2")
-                    {
-                        var cell = new DataGridViewTextBoxCell();
-                        cell.Value = "Validar";
-                        cell.Style.BackColor = Color.FromArgb(255, 150, 62);
-                        row.Cells["DIAN"] = cell;
-                    }
-                    else
-                    {
-                        var cell = new DataGridViewTextBoxCell();
-                        cell.Value = string.Empty;
-                        row.Cells["DIAN"] = cell;
-                        cell.ReadOnly = true;
-                    }
-                }
-
-                if (statusCliente.Contains("3"))
-                {
-                    var cell = new DataGridViewTextBoxCell();
-                    cell.Value = string.Empty;
-                    row.Cells["Cliente"] = cell;
-                    cell.ReadOnly = true;                    
-                }
-            }
-
-            GridViewFacturas.Refresh();
-        }
-
-        private void ContenedorFacturas_Load(object sender, EventArgs e)
-        {
-            LoadManifiestos();
-        }
 
         private void GridViewFacturas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -200,7 +83,7 @@ namespace FacturacionElectronica.Vista
                     if (Datos.Rows[e.RowIndex][4].ToString().Contains("0"))
                     {
                         Alerta alerta = new Alerta();
-                        alerta.Mostrar("Enviando cliente", "Se estan enviando los archivos al cliente", 4000);
+                        alerta.Mostrar("Enviando cliente", "Se estan enviando los archivos al cliente", 1000);
 
                         try
                         {
@@ -301,7 +184,7 @@ namespace FacturacionElectronica.Vista
                             stream.Close();
 
                             adjuntos.Add(directorio + "fv" + zipBodyName + ".zip");
-                           
+
 
                             Correos mi = new Correos();
                             CorreosDAO miDao = new CorreosDAO();
@@ -344,6 +227,125 @@ namespace FacturacionElectronica.Vista
                 }
             }
         }
+
+        public void LoadManifiestos()
+        {
+            GridViewFacturas.Columns.Clear();
+            Datos = new DataTable();
+            Datos = ListaFacturas.selectListFacturas();
+            GridViewFacturas.DataSource = Datos;
+            // Boton Dian
+            DataGridViewButtonColumn btnEnviar = new DataGridViewButtonColumn();
+            btnEnviar.FlatStyle = FlatStyle.Standard;
+            btnEnviar.CellTemplate.Style.BackColor = Color.FromArgb(255, 150, 62);
+            btnEnviar.Name = "DIAN";
+            btnEnviar.Text = "Enviar";
+            btnEnviar.UseColumnTextForButtonValue = true;
+
+
+            //btnEnviar = Image.FromFile(Environment.CurrentDirectory + @"\Mini.jpg");
+            // Align the image and text on the button.
+            //button1.ImageAlign = ContentAlignment.MiddleRight;
+            //button1.TextAlign = ContentAlignment.MiddleLeft;
+            //Boton Cliente
+            DataGridViewButtonColumn btnEnviarCliente = new DataGridViewButtonColumn();
+            btnEnviarCliente.FlatStyle = FlatStyle.Standard;
+            btnEnviarCliente.CellTemplate.Style.BackColor = Color.FromArgb(255, 150, 62);
+            btnEnviarCliente.Name = "Cliente";
+            btnEnviarCliente.Text = "Enviar";
+            btnEnviarCliente.UseColumnTextForButtonValue = true;
+            int columnIndex = 4;
+            if (GridViewFacturas.Columns["Enviar"] == null)
+            {
+                GridViewFacturas.Columns.Insert(columnIndex, btnEnviar);
+            }
+            int columnIndexCliente = 6;
+            if (GridViewFacturas.Columns["Enviar"] == null)
+            {
+                GridViewFacturas.Columns.Insert(columnIndexCliente, btnEnviarCliente);
+            }
+            GridViewFacturas.DefaultCellStyle.Font = new Font("Arial", 11);
+            GridViewFacturas.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(0, 85, 118);
+            GridViewFacturas.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 11, FontStyle.Bold);
+            GridViewFacturas.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+
+            DataGridViewColumn column = GridViewFacturas.Columns[0];
+            column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            column.Width = 70;
+            DataGridViewColumn columnUno = GridViewFacturas.Columns[1];
+            columnUno.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnUno.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnUno.Width = 110;
+            DataGridViewColumn columnDos = GridViewFacturas.Columns[2];
+            columnDos.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            columnDos.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            columnDos.Width = columnDos.Width = (GridViewFacturas.Rows.Count < 16 ? 410 : 390); //345; x - 15
+            DataGridViewColumn columnTres = GridViewFacturas.Columns[3];
+            columnTres.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnTres.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnTres.Width = 120;
+            DataGridViewColumn columnCuatro = GridViewFacturas.Columns[4];
+            columnCuatro.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnCuatro.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnCuatro.Width = 100;
+            DataGridViewColumn columnCinco = GridViewFacturas.Columns[5];
+            columnCinco.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            columnCinco.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            columnCinco.Width = 120;
+            DataGridViewColumn columnSeis = GridViewFacturas.Columns[6];
+            columnSeis.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnSeis.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+
+
+            foreach (DataGridViewRow row in GridViewFacturas.Rows)
+            {
+                var TipoDocumento = row.Cells["Prefijo"].Value.ToString();
+                if (ambiente == "")
+                {
+                    var configura = new ConfiguracionDIANDAO().getConfiguracion(row.Cells["Consecutivo"].Value.ToString(), "", "F", TipoDocumento);
+                    ambiente = configura != null ? configura.TipoAmbiente : "";
+                }
+
+                var statusDIAN = row.Cells["StatusDIAN"].Value.ToString();
+                var statusCliente = row.Cells["StatusCliente"].Value.ToString();
+
+                if (statusDIAN.Contains("3"))
+                {
+                    if (ambiente == "2")
+                    {
+                        var cell = new DataGridViewTextBoxCell();
+                        cell.Value = "Validar";
+                        cell.Style.BackColor = Color.FromArgb(255, 150, 62);
+                        row.Cells["DIAN"] = cell;
+                    }
+                    else
+                    {
+                        var cell = new DataGridViewTextBoxCell();
+                        cell.Value = string.Empty;
+                        row.Cells["DIAN"] = cell;
+                        cell.ReadOnly = true;
+                    }
+                }
+
+                if (statusCliente.Contains("3"))
+                {
+                    var cell = new DataGridViewTextBoxCell();
+                    cell.Value = string.Empty;
+                    row.Cells["Cliente"] = cell;
+                    cell.ReadOnly = true;                    
+                }
+            }
+
+            GridViewFacturas.Refresh();
+        }
+
+        private void ContenedorFacturas_Load(object sender, EventArgs e)
+        {
+            LoadManifiestos();
+        }
+
 
         private void BtnSalir_Click(object sender, EventArgs e)
         {
@@ -408,7 +410,7 @@ namespace FacturacionElectronica.Vista
             DataGridViewColumn columnDos = GridViewFacturas.Columns[2];
             columnDos.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
             columnDos.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            columnDos.Width = 345;
+            columnDos.Width = columnDos.Width = (GridViewFacturas.Rows.Count < 16 ? 410 : 390); //345; x - 15
             DataGridViewColumn columnTres = GridViewFacturas.Columns[3];
             columnTres.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             columnTres.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -530,7 +532,7 @@ namespace FacturacionElectronica.Vista
             DataGridViewColumn columnDos = GridViewFacturas.Columns[2];
             columnDos.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
             columnDos.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            columnDos.Width = 345;
+            columnDos.Width = columnDos.Width = (GridViewFacturas.Rows.Count < 16 ? 410 : 390); //345; x - 15
             DataGridViewColumn columnTres = GridViewFacturas.Columns[3];
             columnTres.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             columnTres.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -594,6 +596,113 @@ namespace FacturacionElectronica.Vista
             GridViewFacturas.Refresh();
         }
 
+        private void LoadNomina()
+        {
+            GridViewFacturas.Columns.Clear();
+
+            Datos = new DataTable();
+            Datos = ListaFacturas.selectListNomina();
+            GridViewFacturas.DataSource = Datos;
+
+            // Boton Dian
+            DataGridViewButtonColumn btnEnviar = new DataGridViewButtonColumn();
+            btnEnviar.FlatStyle = FlatStyle.Standard;
+            btnEnviar.CellTemplate.Style.BackColor = Color.FromArgb(255, 150, 62);
+            btnEnviar.Name = "DIAN";
+            btnEnviar.Text = "Enviar";
+            btnEnviar.UseColumnTextForButtonValue = true;
+
+            int columnIndex = 4;
+            if (GridViewFacturas.Columns["Enviar"] == null)
+            {
+                GridViewFacturas.Columns.Insert(columnIndex, btnEnviar);
+            }
+
+            GridViewFacturas.DefaultCellStyle.Font = new Font("Arial", 11);
+
+            //  PREFIJO
+            DataGridViewColumn column = GridViewFacturas.Columns[0];
+            column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            column.Width = 80;
+
+            //  Consecutivo
+            DataGridViewColumn columnUno = GridViewFacturas.Columns[1];
+            columnUno.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnUno.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnUno.Width = 100;
+
+            //  Cédula
+            DataGridViewColumn columnDos = GridViewFacturas.Columns[2];
+            columnDos.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            columnDos.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            columnDos.Width = (GridViewFacturas.Rows.Count < 16 ? 150 : 135);
+
+            //  Nombres y apellidos
+            DataGridViewColumn columnTres = GridViewFacturas.Columns[3];
+            columnTres.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnTres.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            columnTres.Width = 480;
+
+            //  DIAN
+            DataGridViewColumn columnCuatro = GridViewFacturas.Columns[4];
+            columnCuatro.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnCuatro.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            columnCuatro.Width = 100;
+
+            //  STATUSDIAN
+            DataGridViewColumn columnCinco = GridViewFacturas.Columns[5];
+            columnCinco.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            columnCinco.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            columnCinco.Width = 120;
+
+            foreach (DataGridViewRow row in GridViewFacturas.Rows)
+            {
+                /*var TipoDocumento = row.Cells["Prefijo"].Value.ToString();
+                if (ambiente == "")
+                {
+                    FacturasDAO facDAO = new FacturasDAO();
+                    Factura miFactura = new Factura();
+
+                    miFactura = facDAO.selectManDetallesDebito(row.Cells["Consecutivo"].Value.ToString(), "D", TipoDocumento);
+
+                    var configura = new ConfiguracionDIANDAO().getConfiguracion(row.Cells["Consecutivo"].Value.ToString(), miFactura.Facturanumero, "D", TipoDocumento);
+                    ambiente = configura != null ? configura.TipoAmbiente : "";
+                }*/
+
+                var statusDIAN = row.Cells["StatusDIAN"].Value.ToString();
+                //var statusCliente = row.Cells["StatusCliente"].Value.ToString();
+
+                if (statusDIAN.Contains("3"))
+                {
+                    if (ambiente == "2")
+                    {
+                        var cell = new DataGridViewTextBoxCell();
+                        cell.Value = "Validar";
+                        cell.Style.BackColor = Color.FromArgb(255, 150, 62);
+                        row.Cells["DIAN"] = cell;
+                    }
+                    else
+                    {
+                        var cell = new DataGridViewTextBoxCell();
+                        cell.Value = string.Empty;
+                        row.Cells["DIAN"] = cell;
+                        cell.ReadOnly = true;
+                    }
+                }
+
+                /*if (statusCliente.Contains("3"))
+                {
+                    var cell = new DataGridViewTextBoxCell();
+                    cell.Value = string.Empty;
+                    row.Cells["CLIENTE"] = cell;
+                    cell.ReadOnly = true;
+                }*/
+            }
+
+            GridViewFacturas.Refresh();
+        }
+
         private void BtnNotasDebito_Click(object sender, EventArgs e)
         {
             Tablero = "D";
@@ -611,10 +720,20 @@ namespace FacturacionElectronica.Vista
             {
                 LoadNotasDebito();
             }
-            else
+            else if (Tablero.Equals("C"))
             {
                 LoadNotasCredito();
             }
+            else if (Tablero.Equals("N"))
+            {
+                LoadNomina();
+            }
+        }
+
+        private void BtnNomina_Click(object sender, EventArgs e)
+        {
+            Tablero = "N";
+            LoadNomina();
         }
 
         private void GridViewFacturas_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -628,6 +747,16 @@ namespace FacturacionElectronica.Vista
         }
 
         private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void BtnNominaAjuste_Click(object sender, EventArgs e)
         {
 
         }
