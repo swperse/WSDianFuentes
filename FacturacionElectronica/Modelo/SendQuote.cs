@@ -161,7 +161,7 @@ namespace FacturacionElectronica.Modelo
             else titulo = "Nota crédito";
 
             Alerta alerta = new Alerta();
-            alerta.Mostrar("Facturacion Dian", "Enviando " + titulo + " " + NroFactura + " a la DIAN", 4000);
+            alerta.Mostrar("Facturacion Dian", "Enviando " + titulo + " " + NroFactura + " a la DIAN", 1000);
             FacturasDAO facDAO = new FacturasDAO();
             Factura miFactura = new Factura();
 
