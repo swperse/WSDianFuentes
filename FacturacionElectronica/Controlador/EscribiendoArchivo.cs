@@ -16,7 +16,8 @@ using FacturacionElectronica.Conexion;
 using System.Security.Cryptography.X509Certificates;
 using iTextSharp.text.xml;
 using System.Xml;
-using eFacturacionColombia_V2.Firma;
+//using eFacturacionColombia_V2.Firma;
+using FirmaXAdESColombia;
 
 namespace FacturacionElectronica.Controlador
 {
