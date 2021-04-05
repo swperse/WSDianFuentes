@@ -2,13 +2,6 @@
 using FacturacionElectronica.DAO;
 using FacturacionElectronica.Vista;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FacturacionElectronica
@@ -45,7 +38,7 @@ namespace FacturacionElectronica
                         MessageBox.Show("Password equivocado \n Por favor intentelo nuevamente", "INICIO DE SESION", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     case -1:
-                        MessageBox.Show("Acceso Concedido", "INICIO DE SESION", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //MessageBox.Show("Acceso Concedido", "INICIO DE SESION", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Hide();
                         Application.EnableVisualStyles();
                         ContenedorFacturas Contenedor = new ContenedorFacturas(Usuario);

@@ -226,7 +226,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(185, 26);
             this.label2.TabIndex = 11;
-            this.label2.Text = "Versión 2020.10";
+            this.label2.Text = "Versión 2021.4L";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // ContenedorFacturas

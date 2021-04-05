@@ -133,9 +133,9 @@
             this.label4.ForeColor = System.Drawing.Color.Black;
             this.label4.Location = new System.Drawing.Point(168, 126);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(134, 18);
+            this.label4.Size = new System.Drawing.Size(133, 18);
             this.label4.TabIndex = 3;
-            this.label4.Text = "Versión 2020.10";
+            this.label4.Text = "Versión 2021.4L";
             // 
             // Login
             // 
