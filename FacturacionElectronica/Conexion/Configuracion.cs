@@ -44,10 +44,15 @@ namespace FacturacionElectronica.Conexion
                     string[] readText = File.ReadAllLines(path);
                     foreach (string s in readText)
                     {
+                        //  Comentarios
+                        if (s.Contains("///")) continue;
+                        
+
                         if (s.Trim() != string.Empty)
                         {
                             Atributo = s.Split('=')[0];
-                            Valor = s.Split('=')[1];
+                            Valor = s.Split('=')[1].Replace("[IGUAL]", "=");
+
                             if (Atributo.Equals("UserDian"))
                             {
                                 this.UserDian = Valor;
