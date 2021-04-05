@@ -323,6 +323,43 @@ namespace FacturacionElectronica.DAO
             return Resultado;
         }
 
+        public DataTable selectListNomina()
+        {
+            DataTable DTableListMan;
+            Con = Connection.Instancia;
+            String SqlSelect;
+            try
+            {
+                Con.OpenCon();
+
+                SqlSelect = "SELECT " +
+                            "N.Prefijo, " +
+                            "N.Consecutivo, " +
+                            "N.Cedula AS Cédula, " +
+                            "(E.Nombre1 + ' ' + E.Nombre2 + ' ' + E.Apellido1 + ' ' + E.Apellido2) AS [Nombres y Apellidos], " +
+                            "CAST(N.StatusDian AS varchar ) + ': ' + StaDian.Nombre StatusDIAN " +
+                            "FROM Nomina N, Empleado E, TipoStatusDIAN StaDian " +
+                            "WHERE " +
+                            "StaDian.Tipo = N.StatusDIAN AND " +
+                            "N.Estado = 3 AND " +
+                            "N.Cedula = E.Cedula;";
+
+
+                DAdapter = new SqlDataAdapter(SqlSelect, Con.Con);
+                DTableListMan = new DataTable();
+                DAdapter.Fill(DTableListMan);
+                Con.CloseCon();
+            }
+            catch (Exception ex)
+            {
+                DTableListMan = null;
+                MessageBox.Show("Ocurrió un error : " + ex.Message, "Consulta Listado Manifiestos",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return DTableListMan;
+        }
+
         public List<DetalleFactura> ListadoProductos(String NroFactura, string numDocumento, string tipoFactura, string resolucion, double TRM)
         {
             List<DetalleFactura> listado = new List<DetalleFactura>();
